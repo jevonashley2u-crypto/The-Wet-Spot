@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Video, Clock, CreditCard, CheckCircle2, X } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 interface PrivateRoomRequestProps {
   creatorName: string;

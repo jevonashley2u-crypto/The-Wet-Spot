@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Heart, MessageCircle, Share2, DollarSign, Lock, Play } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { supabase } from '../lib/supabase';
 
 // Mock Data

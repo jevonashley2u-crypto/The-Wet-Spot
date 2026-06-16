@@ -3,7 +3,7 @@ import {
   Heart, MessageCircle, Share2, MapPin, Link as LinkIcon, 
   Lock, Star, DollarSign, Video, Image as ImageIcon, CheckCircle, Pin
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { supabase } from '../lib/supabase';
 
 // Mock Data
