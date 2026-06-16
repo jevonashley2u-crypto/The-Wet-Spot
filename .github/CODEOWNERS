@@ -1,0 +1,9 @@
+# Global owners
+*       @frontend-team @backend-team
+
+# Backend specific
+/backend/  @backend-team
+
+# CI/CD specific
+/.github/  @devops-team
+/vercel.json @devops-team
