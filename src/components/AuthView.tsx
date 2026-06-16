@@ -30,8 +30,10 @@ export const AuthView: React.FC = () => {
           password,
           options: {
             data: {
+              handle: username || email.split('@')[0],
+              name: username || email.split('@')[0],
               username: username || email.split('@')[0],
-              full_name: username
+              full_name: username || email.split('@')[0]
             }
           }
         });
