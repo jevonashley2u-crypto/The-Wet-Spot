@@ -27,6 +27,7 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 import { Creator } from "./types";
 import { mockCreators, mockSocialProofEvents } from "./data";
+import bgVideo from "./assets/bg-theme.mp4";
 
 type PageID = 
   | "landing" 
@@ -143,7 +144,7 @@ function AppContent() {
         muted 
         playsInline 
         className="fixed inset-0 w-full h-full object-cover z-0" 
-        src="/bg-theme.mp4" 
+        src={bgVideo} 
       />
       <AnimatePresence>
         {tickerNotification && (

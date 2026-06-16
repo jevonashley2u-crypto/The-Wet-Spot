@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock, Mail, User as UserIcon, Sparkles } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
+import bgVideo from '../assets/bg-theme.mp4';
 import { supabase } from '../lib/supabase';
 
 export const AuthView: React.FC = () => {
@@ -55,7 +57,7 @@ export const AuthView: React.FC = () => {
         muted 
         playsInline 
         className="fixed inset-0 w-full h-full object-cover z-0" 
-        src="/bg-theme.mp4" 
+        src={bgVideo} 
       />
 
       <motion.div 
