@@ -7,7 +7,7 @@ from supabase import create_client, Client
 router = APIRouter(prefix="/api/v1/admin/users", tags=["admin"])
 
 def get_supabase_admin() -> Client:
-    url: str = os.getenv("VITE_SUPABASE_URL")
+    url: str = os.getenv("VITE_SUPABASE_URL", "https://wzeppdvxpqflkefozipv.supabase.co")
     key: str = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
     if not url or not key:
         raise HTTPException(status_code=500, detail="Supabase Admin credentials not configured on server.")

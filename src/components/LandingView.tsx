@@ -77,7 +77,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onExplore, onSelectCre
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="mt-6 text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto font-sans font-light leading-relaxed"
+            className="mt-6 text-base sm:text-lg text-black max-w-2xl mx-auto font-sans font-light leading-relaxed drop-shadow-md"
           >
             Say goodbye to restrictive algorithmic feeds and unfair 20% platform cuts. 
             Host live streams, monetize smart modular digital assets, and use state-of-the-art AI fan insights.
