@@ -1,0 +1,1 @@
+import { createClient } from '@supabase/supabase-js'; import dotenv from 'dotenv'; import ws from 'ws'; dotenv.config(); const supabase = createClient(process.env.VITE_SUPABASE_URL, process.env.VITE_SUPABASE_ANON_KEY, { global: { fetch: fetch }, realtime: { transport: ws } }); async function pushSchema() { console.log('Checking database tables...'); } pushSchema();

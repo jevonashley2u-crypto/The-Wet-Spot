@@ -12,6 +12,7 @@ from services.analytics import predict_ltv, predict_propensity
 from services.billing import router as billing_router
 from services.live import router as live_router
 from services.persona import router as persona_router
+from services.admin import router as admin_router
 import sentry_sdk
 import os
 from fastapi.middleware.cors import CORSMiddleware
@@ -46,6 +47,7 @@ async def rate_limit_middleware(request: Request, call_next):
 app.include_router(billing_router)
 app.include_router(live_router)
 app.include_router(persona_router)
+app.include_router(admin_router)
 
 # --- MODULE A: Viral Prediction & Content Scoring ---
 

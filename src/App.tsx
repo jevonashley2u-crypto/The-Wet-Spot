@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { 
   Sparkles, Compass, MessageSquare, Radio, ShoppingBag, 
   BarChart3, LayoutDashboard, Wallet, 
-  CheckCircle,
+  CheckCircle, Shield,
   Brain, Trophy, Mic, MicOff, Network, Users
 } from "lucide-react";
 
@@ -23,6 +23,7 @@ import { ReferralHubView } from "./components/ReferralHubView";
 import { CommunityHubView } from "./components/CommunityHubView";
 import { ShareEngineModal } from "./components/ShareEngineModal";
 import { AuthView } from "./components/AuthView";
+import { AdminDashboardView } from "./components/AdminDashboardView";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 import { Creator } from "./types";
@@ -41,7 +42,8 @@ type PageID =
   | "ai-suite"
   | "gamification"
   | "referral"
-  | "community";
+  | "community"
+  | "admin";
 
 function AppContent() {
   const { user, isLoading } = useAuth();
@@ -91,7 +93,8 @@ function AppContent() {
     { id: "referral", label: "Growth Hub", icon: <Network className="w-5 h-5 text-pink-400" /> },
     { id: "community", label: "Community Engine", icon: <Users className="w-5 h-5 text-emerald-400" /> },
     { id: "analytics", label: "Ecosystem Analytics", icon: <BarChart3 className="w-5 h-5" /> },
-    { id: "wallet-settings", label: "Credentials & Ledger", icon: <Wallet className="w-5 h-5" /> }
+    { id: "wallet-settings", label: "Credentials & Ledger", icon: <Wallet className="w-5 h-5" /> },
+    { id: "admin", label: "Platform Admin", icon: <Shield className="w-5 h-5 text-red-500" /> }
   ];
 
   const handleNavClick = (pageId: PageID) => {
@@ -271,6 +274,10 @@ function AppContent() {
 
             {currentPage === "wallet-settings" && (
               <WalletSettingsView onNotify={dispatchNotification} />
+            )}
+
+            {currentPage === "admin" && (
+              <AdminDashboardView />
             )}
           </motion.div>
         </AnimatePresence>
