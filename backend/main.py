@@ -1,18 +1,18 @@
 from fastapi import FastAPI, HTTPException, Request
 from typing import List, Dict
 
-from models import (
+from .models import (
     ContentScoringRequest, ShareabilityRequest, PredictionResult,
     AudienceSegmentRequest, Post, LTVPredictionRequest, PropensityRequest,
     ReferralTrackRequest
 )
-from services.scoring import calculate_momentum_score, predict_shareability
-from services.recommendation import rank_trending_feed, rank_for_you_feed
-from services.analytics import predict_ltv, predict_propensity
-from services.billing import router as billing_router
-from services.live import router as live_router
-from services.persona import router as persona_router
-from services.admin import router as admin_router
+from .services.scoring import calculate_momentum_score, predict_shareability
+from .services.recommendation import rank_trending_feed, rank_for_you_feed
+from .services.analytics import predict_ltv, predict_propensity
+from .services.billing import router as billing_router
+from .services.live import router as live_router
+from .services.persona import router as persona_router
+from .services.admin import router as admin_router
 import sentry_sdk
 import os
 from fastapi.middleware.cors import CORSMiddleware
