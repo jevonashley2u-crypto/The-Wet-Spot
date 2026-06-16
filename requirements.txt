@@ -5,4 +5,4 @@ pydantic==2.4.2
 sentry-sdk==1.31.0
 stripe==7.1.0
 supabase==2.3.0
-livekit-server-sdk-python==0.5.0
+livekit-api

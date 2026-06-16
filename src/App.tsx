@@ -134,31 +134,17 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[#010a14] text-white selection:bg-teal-500/30 selection:text-teal-200 overflow-hidden flex flex-col relative font-sans">
-      
-      {/* 2031 Dynamic Spatial Background */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden perspective-container">
-        <motion.div 
-          animate={{
-            rotateZ: [0, 5, 0, -5, 0],
-            scale: [1, 1.05, 1],
-          }}
-          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-          className="absolute inset-[-10%] bg-gradient-to-br from-teal-900/10 via-[#010a14] to-pink-900/10"
-        >
-          <img 
-            src="https://lh3.googleusercontent.com/d/1vt93TCcsOlei75mZUXSo_FingKiGm9et" 
-            alt="Ecosystem Background" 
-            className="w-full h-full object-cover opacity-[0.15] mix-blend-screen"
-            referrerPolicy="no-referrer"
-          />
-        </motion.div>
-        {/* Holographic light beams */}
-        <div className="absolute top-0 left-1/4 w-[1px] h-full bg-gradient-to-b from-transparent via-teal-500/30 to-transparent shadow-[0_0_20px_rgba(20,184,166,0.5)]" />
-        <div className="absolute top-0 right-1/4 w-[1px] h-full bg-gradient-to-b from-transparent via-pink-500/20 to-transparent shadow-[0_0_20px_rgba(236,72,153,0.3)]" />
-      </div>
+    <div className="min-h-screen text-white selection:bg-white/30 selection:text-white overflow-hidden flex flex-col relative font-sans">
 
-      {/* DYNAMIC ALERT SLIDE-IN */}
+      {/* Video Background */}
+      <video 
+        autoPlay 
+        loop 
+        muted 
+        playsInline 
+        className="fixed inset-0 w-full h-full object-cover z-0" 
+        src="/bg-theme.mp4" 
+      />
       <AnimatePresence>
         {tickerNotification && (
           <motion.div

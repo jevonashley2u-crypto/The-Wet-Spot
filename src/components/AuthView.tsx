@@ -46,25 +46,29 @@ export const AuthView: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#010a14] flex items-center justify-center p-4 relative overflow-hidden font-sans">
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden font-sans">
       
-      {/* Background Effects */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-teal-500/10 rounded-full blur-[100px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-[100px]" />
-      </div>
+      {/* Video Background */}
+      <video 
+        autoPlay 
+        loop 
+        muted 
+        playsInline 
+        className="fixed inset-0 w-full h-full object-cover z-0" 
+        src="/bg-theme.mp4" 
+      />
 
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md bg-black/60 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 relative z-10 shadow-2xl"
+        className="w-full max-w-md bg-white/10 backdrop-blur-2xl border border-white/30 rounded-3xl p-8 relative z-10 shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
       >
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-tr from-teal-600 to-pink-600 rounded-2xl mx-auto mb-4 flex items-center justify-center rotate-12 shadow-[0_0_30px_rgba(236,72,153,0.3)]">
-            <Sparkles className="w-8 h-8 text-white -rotate-12" />
+          <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl mx-auto mb-4 flex items-center justify-center rotate-12 shadow-lg border border-white/30">
+            <Sparkles className="w-8 h-8 text-white -rotate-12 drop-shadow-md" />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">The Wet Spot</h1>
-          <p className="text-zinc-400">Join the ultimate Creator Ecosystem</p>
+          <h1 className="text-3xl font-bold text-white mb-2 tracking-tight drop-shadow-md">The Wet Spot</h1>
+          <p className="text-white/80 drop-shadow-sm font-medium">Join the ultimate Creator Ecosystem</p>
         </div>
 
         {error && (
@@ -90,7 +94,7 @@ export const AuthView: React.FC = () => {
                     placeholder="Username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-full bg-zinc-900/50 border border-zinc-800 focus:border-pink-500 rounded-xl py-3 pl-12 pr-4 text-white outline-none transition-colors"
+                    className="w-full bg-black/20 border border-white/20 focus:border-white/60 rounded-xl py-3 pl-12 pr-4 text-white placeholder:text-white/60 outline-none transition-colors backdrop-blur-md shadow-inner"
                   />
                 </div>
               </motion.div>
@@ -105,7 +109,7 @@ export const AuthView: React.FC = () => {
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-zinc-900/50 border border-zinc-800 focus:border-pink-500 rounded-xl py-3 pl-12 pr-4 text-white outline-none transition-colors"
+              className="w-full bg-black/20 border border-white/20 focus:border-white/60 rounded-xl py-3 pl-12 pr-4 text-white placeholder:text-white/60 outline-none transition-colors backdrop-blur-md shadow-inner"
             />
           </div>
 
@@ -117,14 +121,14 @@ export const AuthView: React.FC = () => {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-zinc-900/50 border border-zinc-800 focus:border-pink-500 rounded-xl py-3 pl-12 pr-4 text-white outline-none transition-colors"
+              className="w-full bg-black/20 border border-white/20 focus:border-white/60 rounded-xl py-3 pl-12 pr-4 text-white placeholder:text-white/60 outline-none transition-colors backdrop-blur-md shadow-inner"
             />
           </div>
 
           <button 
             type="submit"
             disabled={isLoading}
-            className="w-full py-4 mt-6 bg-gradient-to-r from-teal-500 to-pink-500 hover:from-teal-400 hover:to-pink-400 text-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(236,72,153,0.3)] disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full py-4 mt-6 bg-white/20 hover:bg-white/30 border border-white/40 text-white font-bold rounded-xl transition-all shadow-[0_4px_16px_rgba(0,0,0,0.2)] disabled:opacity-50 flex items-center justify-center gap-2 backdrop-blur-md"
           >
             {isLoading ? (
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -137,7 +141,7 @@ export const AuthView: React.FC = () => {
         <div className="mt-8 text-center">
           <button 
             onClick={() => { setIsLogin(!isLogin); setError(null); }}
-            className="text-zinc-400 hover:text-white transition-colors text-sm font-medium"
+            className="text-white/80 hover:text-white transition-colors text-sm font-bold drop-shadow-md"
           >
             {isLogin ? "Don't have an account? Sign up" : "Already have an account? Log in"}
           </button>
