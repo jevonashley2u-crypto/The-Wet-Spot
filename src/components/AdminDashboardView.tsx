@@ -44,7 +44,8 @@ export const AdminDashboardView: React.FC = () => {
       const slot = i + 1;
       return {
         email: `${bulkPrefix.toLowerCase()}slot${slot}@thewetspot.space`,
-        password: `WetSpotVIP${slot}!`,
+        // Random one-time password; the VIP sets their own via "Forgot password".
+        password: Array.from(crypto.getRandomValues(new Uint8Array(18)), (b) => b.toString(16).padStart(2, '0')).join(''),
         username: `${bulkPrefix}Slot_${slot}`
       };
     });

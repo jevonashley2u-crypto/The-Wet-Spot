@@ -4,7 +4,7 @@ import {
   Sparkles, Compass, MessageSquare, Radio, ShoppingBag, 
   BarChart3, LayoutDashboard, Wallet, 
   CheckCircle, Shield,
-  Brain, Trophy, Mic, MicOff, Network, Users
+  Brain, Trophy, Mic, MicOff, Network, Users, UserCircle
 } from "lucide-react";
 
 // Views Imports
@@ -22,7 +22,8 @@ import { GamificationView } from "./components/GamificationView";
 import { ReferralHubView } from "./components/ReferralHubView";
 import { CommunityHubView } from "./components/CommunityHubView";
 import { ShareEngineModal } from "./components/ShareEngineModal";
-import { AuthView } from "./components/AuthView";
+import { AuthView, ResetPasswordView } from "./components/AuthView";
+import { MyProfileView } from "./components/MyProfileView";
 import { AdminDashboardView } from "./components/AdminDashboardView";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
@@ -43,10 +44,11 @@ type PageID =
   | "gamification"
   | "referral"
   | "community"
-  | "admin";
+  | "admin"
+  | "me";
 
 function AppContent() {
-  const { user, isLoading } = useAuth();
+  const { user, profile, isLoading, isStaff, isPasswordRecovery } = useAuth();
   const [currentPage, setCurrentPage] = useState<PageID>("landing");
   const [selectedCreatorProfile, setSelectedCreatorProfile] = useState<Creator>(mockCreators[0]);
   
@@ -81,7 +83,10 @@ function AppContent() {
   };
 
   // Navigation schema
-  const navItems = [
+  const allNavItems = [
+    { id: "me", label: "My Profile", icon: profile?.avatar_url
+        ? <img src={profile.avatar_url} alt="" className="w-5 h-5 rounded-full object-cover" />
+        : <UserCircle className="w-5 h-5" /> },
     { id: "landing", label: "Pioneer Hub", icon: <Sparkles className="w-5 h-5" /> },
     { id: "discovery", label: "Discovery Matrix", icon: <Compass className="w-5 h-5" /> },
     { id: "messages", label: "Fan Core Chat", icon: <MessageSquare className="w-5 h-5" /> },
@@ -94,8 +99,10 @@ function AppContent() {
     { id: "community", label: "Community Engine", icon: <Users className="w-5 h-5 text-emerald-400" /> },
     { id: "analytics", label: "Ecosystem Analytics", icon: <BarChart3 className="w-5 h-5" /> },
     { id: "wallet-settings", label: "Credentials & Ledger", icon: <Wallet className="w-5 h-5" /> },
-    { id: "admin", label: "Platform Admin", icon: <Shield className="w-5 h-5 text-red-500" /> }
+    { id: "admin", label: "Platform Admin", icon: <Shield className="w-5 h-5 text-red-500" />, staffOnly: true }
   ];
+  // Admin tools are only shown to the owner and partner.
+  const navItems = allNavItems.filter((item) => !("staffOnly" in item && item.staffOnly) || isStaff);
 
   const handleNavClick = (pageId: PageID) => {
     setCurrentPage(pageId);
@@ -130,6 +137,10 @@ function AppContent() {
 
   if (isLoading) {
     return <div className="min-h-screen bg-black flex items-center justify-center text-white">Loading Ecosystem...</div>;
+  }
+
+  if (isPasswordRecovery && user) {
+    return <ResetPasswordView />;
   }
 
   if (!user) {
@@ -276,8 +287,12 @@ function AppContent() {
               <WalletSettingsView onNotify={dispatchNotification} />
             )}
 
-            {currentPage === "admin" && (
+            {currentPage === "admin" && isStaff && (
               <AdminDashboardView />
+            )}
+
+            {currentPage === "me" && (
+              <MyProfileView onNotify={dispatchNotification} />
             )}
           </motion.div>
         </AnimatePresence>
