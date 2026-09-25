@@ -23,6 +23,7 @@ export interface UserProfile {
   role: AppRole;
   subscription_tier: string | null;
   is_grandfathered: boolean | null;
+  verified_until: string | null;
   created_at: string | null;
 }
 
@@ -36,6 +37,8 @@ interface AuthContextType {
   isOwner: boolean;
   /** Owner or partner. */
   isStaff: boolean;
+  /** Can post content: creator, owner or partner. */
+  isCreator: boolean;
   refreshProfile: () => Promise<void>;
   finishPasswordRecovery: () => void;
   signOut: () => Promise<void>;
@@ -44,7 +47,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const PROFILE_COLUMNS =
-  'id, handle, name, avatar_url, banner_url, bio, social_links, role, subscription_tier, is_grandfathered, created_at';
+  'id, handle, name, avatar_url, banner_url, bio, social_links, role, subscription_tier, is_grandfathered, verified_until, created_at';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -133,6 +136,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isPasswordRecovery,
         isOwner: role === 'owner',
         isStaff: role === 'owner' || role === 'partner',
+        isCreator: role === 'creator' || role === 'owner' || role === 'partner',
         refreshProfile,
         finishPasswordRecovery,
         signOut,
@@ -151,6 +155,7 @@ export const useAuth = () => {
   return context;
 };
 
-/** Owner and partner always show the verified check. Paid verification can extend this later. */
-export const hasVerifiedBadge = (p: Pick<UserProfile, 'role'> | null | undefined) =>
-  !!p && (p.role === 'owner' || p.role === 'partner');
+/** Owner and partner always show the verified check; others while their paid verification is active. */
+export const hasVerifiedBadge = (p: Pick<UserProfile, 'role' | 'verified_until'> | null | undefined) =>
+  !!p && (p.role === 'owner' || p.role === 'partner' ||
+    (!!p.verified_until && new Date(p.verified_until).getTime() > Date.now()));

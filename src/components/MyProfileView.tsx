@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { hasVerifiedBadge, SocialLinks, useAuth } from '../contexts/AuthContext';
+import { BecomeCreatorCard } from './social/CreatorRequests';
 
 interface MyProfileViewProps {
   onNotify: (title: string, desc: string) => void;
@@ -389,6 +390,7 @@ export const MyProfileView: React.FC<MyProfileViewProps> = ({ onNotify }) => {
           )}
         </div>
       </motion.div>
+      <BecomeCreatorCard onNotify={onNotify} />
     </div>
   );
 };

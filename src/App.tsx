@@ -4,14 +4,12 @@ import {
   Sparkles, Compass, MessageSquare, Radio, ShoppingBag, 
   BarChart3, LayoutDashboard, Wallet, 
   CheckCircle, Shield,
-  Brain, Trophy, Mic, MicOff, Network, Users, UserCircle
+  Brain, Trophy, Mic, MicOff, Network, Users, UserCircle, PlusSquare
 } from "lucide-react";
 
 // Views Imports
 import { LandingView } from "./components/LandingView";
-import { ContentFeed } from "./components/ContentFeed";
 import { CreatorProfile } from "./components/CreatorProfile";
-import { MessagesView } from "./components/MessagesView";
 import { LivestreamView } from "./components/LivestreamView";
 import { MarketplaceView } from "./components/MarketplaceView";
 import { EarningsDashboard } from "./components/EarningsDashboard";
@@ -24,6 +22,10 @@ import { CommunityHubView } from "./components/CommunityHubView";
 import { ShareEngineModal } from "./components/ShareEngineModal";
 import { AuthView, ResetPasswordView } from "./components/AuthView";
 import { MyProfileView } from "./components/MyProfileView";
+import { FeedView } from "./components/social/FeedView";
+import { CreatePostView } from "./components/social/CreatePostView";
+import { CreatorPageView } from "./components/social/CreatorPageView";
+import { MessagesView } from "./components/social/MessagesView";
 import { AdminDashboardView } from "./components/AdminDashboardView";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
@@ -45,10 +47,15 @@ type PageID =
   | "referral"
   | "community"
   | "admin"
-  | "me";
+  | "me"
+  | "create"
+  | "creator";
 
 function AppContent() {
-  const { user, profile, isLoading, isStaff, isPasswordRecovery } = useAuth();
+  const { user, profile, isLoading, isStaff, isCreator, isPasswordRecovery } = useAuth();
+  const [creatorPageId, setCreatorPageId] = useState<string | null>(null);
+  const [messagePartnerId, setMessagePartnerId] = useState<string | null>(null);
+  const [previousPage, setPreviousPage] = useState<PageID>("discovery");
   const [currentPage, setCurrentPage] = useState<PageID>("landing");
   const [selectedCreatorProfile, setSelectedCreatorProfile] = useState<Creator>(mockCreators[0]);
   
@@ -87,9 +94,10 @@ function AppContent() {
     { id: "me", label: "My Profile", icon: profile?.avatar_url
         ? <img src={profile.avatar_url} alt="" className="w-5 h-5 rounded-full object-cover" />
         : <UserCircle className="w-5 h-5" /> },
+    { id: "create", label: "Create Post", icon: <PlusSquare className="w-5 h-5 text-teal-300" />, creatorOnly: true },
     { id: "landing", label: "Pioneer Hub", icon: <Sparkles className="w-5 h-5" /> },
-    { id: "discovery", label: "Discovery Matrix", icon: <Compass className="w-5 h-5" /> },
-    { id: "messages", label: "Fan Core Chat", icon: <MessageSquare className="w-5 h-5" /> },
+    { id: "discovery", label: "Feed", icon: <Compass className="w-5 h-5" /> },
+    { id: "messages", label: "Messages", icon: <MessageSquare className="w-5 h-5" /> },
     { id: "livestream", label: "Livestream Hub", icon: <Radio className="w-5 h-5" /> },
     { id: "marketplace", label: "Marketplace Node", icon: <ShoppingBag className="w-5 h-5" /> },
     { id: "dashboard", label: "Creator Studio", icon: <LayoutDashboard className="w-5 h-5" /> },
@@ -102,9 +110,22 @@ function AppContent() {
     { id: "admin", label: "Platform Admin", icon: <Shield className="w-5 h-5 text-red-500" />, staffOnly: true }
   ];
   // Admin tools are only shown to the owner and partner.
-  const navItems = allNavItems.filter((item) => !("staffOnly" in item && item.staffOnly) || isStaff);
+  const navItems = allNavItems.filter((item) =>
+    (!("staffOnly" in item && item.staffOnly) || isStaff) &&
+    (!("creatorOnly" in item && item.creatorOnly) || isCreator));
+
+  const openCreatorPage = (userId: string) => {
+    setPreviousPage(currentPage === "creator" ? previousPage : currentPage);
+    setCreatorPageId(userId);
+    setCurrentPage("creator");
+  };
+  const openMessagesWith = (userId: string) => {
+    setMessagePartnerId(userId);
+    setCurrentPage("messages");
+  };
 
   const handleNavClick = (pageId: PageID) => {
+    if (pageId === "messages") setMessagePartnerId(null);
     setCurrentPage(pageId);
   };
 
@@ -124,8 +145,11 @@ function AppContent() {
     }
   }, [isListening]);
 
-  // Global Social Proof Logic
+  // Global Social Proof Logic — turned off: it showed made-up tips and purchases to real users.
+  // Re-enable once it's fed by real activity.
+  const SHOW_SAMPLE_SOCIAL_PROOF = false;
   useEffect(() => {
+    if (!SHOW_SAMPLE_SOCIAL_PROOF) return;
     let index = 0;
     const interval = setInterval(() => {
       setSocialProof(mockSocialProofEvents[index]);
@@ -240,7 +264,21 @@ function AppContent() {
             )}
 
             {currentPage === "discovery" && (
-              <ContentFeed />
+              <FeedView onOpenCreator={openCreatorPage} onCreatePost={() => setCurrentPage("create")} />
+            )}
+
+            {currentPage === "create" && (
+              <CreatePostView onNotify={dispatchNotification} onPosted={() => setCurrentPage("discovery")} />
+            )}
+
+            {currentPage === "creator" && creatorPageId && (
+              <CreatorPageView
+                key={creatorPageId}
+                creatorId={creatorPageId}
+                onBack={() => setCurrentPage(previousPage)}
+                onMessage={openMessagesWith}
+                onEditOwn={() => setCurrentPage("me")}
+              />
             )}
 
             {currentPage === "profile" && (
@@ -248,7 +286,7 @@ function AppContent() {
             )}
 
             {currentPage === "messages" && (
-              <MessagesView onNotify={dispatchNotification} />
+              <MessagesView initialPartnerId={messagePartnerId} onOpenCreator={openCreatorPage} />
             )}
 
             {currentPage === "livestream" && (
@@ -326,7 +364,7 @@ function AppContent() {
           {/* Nav Items */}
           <div className="flex items-center gap-1 overflow-x-auto custom-scrollbar px-2 max-w-[60vw] sm:max-w-none">
             {navItems.map((item) => {
-              const isActive = currentPage === item.id || (item.id === "discovery" && currentPage === "profile");
+              const isActive = currentPage === item.id || (item.id === "discovery" && (currentPage === "profile" || currentPage === "creator"));
               return (
                 <button
                   key={item.id}

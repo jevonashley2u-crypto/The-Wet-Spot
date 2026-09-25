@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
+import { CreatorRequestsPanel } from './social/CreatorRequests';
 import { Shield, Users, UserPlus, Search, Trash2, Key, AlertTriangle, RefreshCw } from 'lucide-react';
 
 export const AdminDashboardView: React.FC = () => {
@@ -95,9 +96,10 @@ export const AdminDashboardView: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-8 font-sans">
+    <div className="min-h-screen bg-black text-white p-4 sm:p-8 font-sans">
       <div className="max-w-6xl mx-auto space-y-8">
-        
+        <CreatorRequestsPanel />
+
         {/* Header */}
         <div className="flex items-center justify-between bg-zinc-900 border border-zinc-800 p-6 rounded-2xl">
           <div className="flex items-center gap-4">
